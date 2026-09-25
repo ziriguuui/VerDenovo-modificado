@@ -13,7 +13,10 @@ public class Ponto {
     
     @Column(nullable = false, length = 50)
     private String nome;
-    
+
+    @Column(length = 14)
+    private String cnpj;
+
     @Column(nullable = false, length = 8)
     private String cep;
     
@@ -69,6 +72,9 @@ public class Ponto {
     
     public String getNome() { return nome; }
     public void setNome(String nome) { this.nome = nome; }
+
+    public String getCnpj() { return cnpj; }
+    public void setCnpj(String cnpj) { this.cnpj = cnpj; }
     
     public String getCep() { return cep; }
     public void setCep(String cep) { this.cep = cep; }

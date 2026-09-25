@@ -28,6 +28,16 @@ public class AuthController {
         return ResponseEntity.ok(authService.login(request));
     }
 
+        @GetMapping("/usuarios/me")
+    public ResponseEntity<UsuarioResponse> meuPerfil(java.security.Principal principal) {
+        return ResponseEntity.ok(authService.buscarPorEmail(principal.getName()));
+    }
+
+    @PutMapping("/usuarios/me")
+    public ResponseEntity<UsuarioResponse> atualizarMeuPerfil(java.security.Principal principal, @RequestBody Map<String, String> body) {
+        return ResponseEntity.ok(authService.atualizarPerfil(principal.getName(), body.get("nome")));
+    }
+
     @PostMapping("/cadastro")
     public ResponseEntity<MessageResponse> cadastro(@RequestBody Usuario usuario) {
         authService.cadastrar(usuario);

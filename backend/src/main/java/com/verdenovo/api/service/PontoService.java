@@ -60,6 +60,8 @@ public class PontoService {
                 || !Objects.equals(ponto.getNumero(), pontoAtualizado.getNumero())
                 || !Objects.equals(ponto.getLogradouro(), pontoAtualizado.getLogradouro());
 
+        // CNPJ não é editável por este formulário (campo somente-leitura no frontend),
+        // então propositalmente não é sobrescrito aqui — evita apagar o valor gravado no cadastro.
         ponto.setNome(pontoAtualizado.getNome());
         ponto.setCep(pontoAtualizado.getCep());
         ponto.setNumero(pontoAtualizado.getNumero());
@@ -86,6 +88,10 @@ public class PontoService {
                     vincularPontoUsuario(ponto, u.getId());
                 }
             });
+        }
+
+        if (ponto.getCnpj() != null) {
+            ponto.setCnpj(ponto.getCnpj().replaceAll("\\D", ""));
         }
 
         codificarSenha(ponto);
