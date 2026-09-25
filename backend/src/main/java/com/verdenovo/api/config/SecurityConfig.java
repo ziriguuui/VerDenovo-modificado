@@ -46,6 +46,7 @@ public class SecurityConfig {
                 .requestMatchers("/api/auth/recuperar-senha", "/api/auth/verificar-codigo", "/api/auth/redefinir-senha").permitAll()
                 .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/pontos", "/api/categorias").permitAll()
                 .requestMatchers("/api/pontos/login").permitAll()
+                                .requestMatchers("/api/auth/usuarios/me").authenticated()
                 .requestMatchers("/api/auth/usuarios", "/api/auth/usuarios/**").hasAuthority("ADMIN")
                 .requestMatchers("/api/pontos/todos", "/api/pontos/pendentes").hasAuthority("ADMIN")
                 .requestMatchers(org.springframework.http.HttpMethod.PUT, "/api/pontos/*/aprovar").hasAuthority("ADMIN")
@@ -54,7 +55,7 @@ public class SecurityConfig {
                 .requestMatchers(org.springframework.http.HttpMethod.POST, "/api/pontos").authenticated()
                 .anyRequest().authenticated()
             )
-            .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+            .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class); 
         return http.build();
     }
 

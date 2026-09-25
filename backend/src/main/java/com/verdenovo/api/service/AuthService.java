@@ -37,6 +37,24 @@ public class AuthService {
             usuario.getNivelAcesso(), usuario.getStatusUsuario()));
     }
 
+        public UsuarioResponse buscarPorEmail(String email) {
+        Usuario usuario = usuarioRepository.findByEmail(email)
+            .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+        return new UsuarioResponse(usuario.getId(), usuario.getNome(), usuario.getEmail(),
+            usuario.getNivelAcesso(), usuario.getStatusUsuario());
+    }
+
+    public UsuarioResponse atualizarPerfil(String email, String novoNome) {
+        Usuario usuario = usuarioRepository.findByEmail(email)
+            .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+        if (novoNome != null && !novoNome.isBlank()) {
+            usuario.setNome(novoNome);
+            usuarioRepository.save(usuario);
+        }
+        return new UsuarioResponse(usuario.getId(), usuario.getNome(), usuario.getEmail(),
+            usuario.getNivelAcesso(), usuario.getStatusUsuario());
+    }
+
     public void cadastrar(Usuario usuario) {
         if (usuarioRepository.existsByEmail(usuario.getEmail())) {
             throw new RuntimeException("Email já cadastrado");

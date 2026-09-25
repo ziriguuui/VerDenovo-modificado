@@ -19,14 +19,25 @@ export const AuthProvider = ({ children }) => {
   const [mostrarMensagemLogout, setMostrarMensagemLogout] = useState(false);
 
   useEffect(() => {
-    if (usuario && usuario.tipo === 'usuario' && !usuario.pontoVinculado) {
-      apiService.listarMeusPontos().catch(() => []).then(meusPontos => {
-        const pontoAtivo = meusPontos.find(p => p.statusPonto === 'ATIVO') || null;
-        if (pontoAtivo) setUsuario(prev => ({ ...prev, pontoVinculado: pontoAtivo }));
+  if (!usuario || usuario.tipo !== 'usuario') return undefined;
+
+  const verificarPonto = () => {
+    apiService.listarMeusPontos().catch(() => []).then(meusPontos => {
+      const pontoAtivo = meusPontos.find(p => p.statusPonto === 'ATIVO') || null;
+      setUsuario(prev => {
+        if (!prev) return prev;
+        const atual = prev.pontoVinculado;
+        const mudou = (atual?.id || null) !== (pontoAtivo?.id || null);
+        return mudou ? { ...prev, pontoVinculado: pontoAtivo } : prev;
       });
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    });
+  };
+
+  verificarPonto();
+  const intervalId = setInterval(verificarPonto, 20000);
+  return () => clearInterval(intervalId);
+// eslint-disable-next-line react-hooks/exhaustive-deps
+}, [usuario?.dados?.id]);
 
   useEffect(() => {
     if (usuario) {

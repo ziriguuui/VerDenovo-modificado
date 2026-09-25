@@ -71,25 +71,34 @@ const mapear = (ponto) => ({
 });
 
 function statusInfo(ponto) {
-  if (ponto?.statusVerificacao === 'VERIFICADO') {
+  const status = ponto?.statusPonto;
+  if (status === 'ATIVO') {
     return {
-      label: 'Verificado',
-      detail: 'Dados conferidos automaticamente',
+      label: 'Aprovado',
+      detail: 'Ponto ativo e visivel ao publico',
       icon: 'bi-patch-check-fill',
       tone: 'verified',
     };
   }
-  if (ponto?.statusVerificacao === 'NAO_VERIFICADO') {
+  if (status === 'REJEITADO') {
     return {
-      label: 'Nao verificado',
-      detail: 'Precisa de revisao',
+      label: 'Rejeitado',
+      detail: 'Cadastro nao aprovado pelo administrador',
       icon: 'bi-x-circle-fill',
+      tone: 'blocked',
+    };
+  }
+  if (status === 'INATIVO') {
+    return {
+      label: 'Inativo',
+      detail: 'Ponto desativado, nao aparece ao publico',
+      icon: 'bi-slash-circle-fill',
       tone: 'blocked',
     };
   }
   return {
     label: 'Pendente de revisao',
-    detail: 'Aguardando validacao',
+    detail: 'Aguardando validacao do administrador',
     icon: 'bi-hourglass-split',
     tone: 'pending',
   };
